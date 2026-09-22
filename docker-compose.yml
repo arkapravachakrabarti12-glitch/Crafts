@@ -1,0 +1,41 @@
+# Local development database. Start it with:  docker compose up -d mysql
+# (Or run the whole stack, including the backend: docker compose up --build)
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: teachnet
+      MYSQL_USER: teachnet
+      MYSQL_PASSWORD: teachnet
+      MYSQL_ROOT_PASSWORD: root
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build: ./backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql:3306/teachnet?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DATABASE_USERNAME: teachnet
+      DATABASE_PASSWORD: teachnet
+      JWT_SECRET: local-docker-secret-change-me-0123456789abcdef
+      CORS_ALLOWED_ORIGINS: http://localhost:5173
+      SEED_DEMO_DATA: "true"
+      ADMIN_EMAIL: admin@teachnet.local
+      ADMIN_PASSWORD: admin12345
+    ports:
+      - "8080:8080"
+    profiles: ["full"]
+
+volumes:
+  mysql-data:
