@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MPIN Generator</string>
+
+    <!-- Lock screen -->
+    <string name="lock_title">MPIN Generator is locked</string>
+    <string name="lock_subtitle">Unlock with your fingerprint, or your phone\'s PIN, pattern or password.</string>
+    <string name="lock_setup_needed">Your phone has no screen lock. Set up a fingerprint, PIN, pattern or password to protect your MPINs.</string>
+    <string name="lock_unlock">Unlock</string>
+    <string name="lock_open_settings">Open security settings</string>
+    <string name="lock_tap_to_unlock">Tap Unlock to try again.</string>
+    <string name="lock_prompt_title">Unlock MPIN Generator</string>
+    <string name="lock_prompt_subtitle">Use your fingerprint, PIN, pattern or password</string>
+
+    <!-- Main -->
+    <string name="gen_title">Generate a secure MPIN</string>
+    <string name="gen_subtitle">Name its purpose and pick a length. Easy guesses like 1234, 1111 or 2580 are never issued.</string>
+    <string name="label_hint">Label / Purpose</string>
+    <string name="label_placeholder">e.g. SBI mobile banking</string>
+    <string name="label_required">Please enter a label so you know what this MPIN is for.</string>
+    <string name="digits_4">4 digits</string>
+    <string name="digits_6">6 digits</string>
+    <string name="generate">Generate MPIN</string>
+    <string name="for_label">For: %1$s</string>
+    <string name="copy">Copy MPIN</string>
+    <string name="show">Show MPIN</string>
+    <string name="hide">Hide MPIN</string>
+    <string name="copied">MPIN copied. Clipboard clears in 45 seconds.</string>
+    <string name="history">History</string>
+    <plurals name="history_count">
+        <item quantity="one">%d MPIN generated</item>
+        <item quantity="other">%d MPINs generated</item>
+    </plurals>
+    <string name="history_empty">Your generated MPINs will appear here.</string>
+    <string name="export_excel">Export to Excel</string>
+    <string name="exported">Exported %d MPINs to Excel</string>
+    <string name="export_failed">Couldn\'t save the Excel file</string>
+    <string name="nothing_to_export">Generate an MPIN first</string>
+    <string name="clear_history">Clear history</string>
+    <string name="clear_confirm_title">Clear history?</string>
+    <string name="clear_confirm_body">All saved MPINs will be deleted from this phone.</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
+    <string name="cleared">History cleared</string>
+    <string name="lock_now">Lock now</string>
+    <string name="settings">Settings</string>
+    <string name="email_not_setup">Email alert not sent: finish email setup in Settings.</string>
+    <string name="email_status_pending">Email pending</string>
+    <string name="email_status_sent">Emailed</string>
+    <string name="email_status_failed">Email failed</string>
+    <string name="banner_title">Get an email for every new MPIN</string>
+    <string name="banner_body">Connect your Gmail so each generated MPIN is sent to you.</string>
+    <string name="banner_setup">Set up</string>
+    <string name="banner_dismiss">Not now</string>
+
+    <!-- Settings -->
+    <string name="settings_email">Email alerts</string>
+    <string name="settings_email_enabled">Email me when an MPIN is generated</string>
+    <string name="settings_sender">Your Gmail address</string>
+    <string name="settings_password">Gmail App Password</string>
+    <string name="settings_password_help">16 characters from Google, not your normal password</string>
+    <string name="settings_recipient">Send to (optional)</string>
+    <string name="settings_recipient_help">Leave empty to send to your Gmail address</string>
+    <string name="settings_include_mpin">Include the full MPIN in the email</string>
+    <string name="settings_include_mpin_help">When off, only the last 2 digits are shown</string>
+    <string name="settings_how_title">How to get an App Password</string>
+    <string name="settings_how_body">1. Turn on 2-Step Verification in your Google Account.\n2. Open myaccount.google.com/apppasswords.\n3. Create one named \"MPIN Generator\" and paste the 16 characters here.</string>
+    <string name="settings_save">Save</string>
+    <string name="settings_test">Send test email</string>
+    <string name="settings_saved">Settings saved</string>
+    <string name="settings_save_failed">Couldn\'t save settings</string>
+    <string name="settings_sending">Sending test email…</string>
+    <string name="settings_test_ok">Test email sent to %1$s</string>
+    <string name="settings_invalid_email">Enter a valid email address</string>
+    <string name="settings_password_required">Enter the App Password</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_autolock">Auto-lock</string>
+    <string-array name="lock_delay_names">
+        <item>Immediately</item>
+        <item>After 30 seconds</item>
+        <item>After 1 minute</item>
+        <item>After 5 minutes</item>
+    </string-array>
+</resources>
