@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in · MPIN Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+<div class="bg-glow" aria-hidden="true"></div>
+
+<main class="auth-card card">
+    <div class="brand brand-lg">
+        <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+        </span>
+        <div>
+            <h1>MPIN Generator</h1>
+            <p class="muted">Sign in to generate secure 4 or 6 digit MPINs</p>
+        </div>
+    </div>
+
+    <div id="alert" class="alert" role="alert" hidden></div>
+
+    <form action="login" method="post" class="form" autocomplete="on">
+        <label class="field">
+            <span>Username</span>
+            <input type="text" name="username" placeholder="Enter your username"
+                   autocomplete="username" required autofocus>
+        </label>
+
+        <label class="field">
+            <span>Password</span>
+            <span class="input-wrap">
+                <input type="password" name="password" id="password" placeholder="Enter your password"
+                       autocomplete="current-password" required>
+                <button type="button" class="icon-btn ghost" id="togglePassword" aria-label="Show password">
+                    <svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+            </span>
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-block">
+            Sign in
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+    </form>
+
+    <p class="footnote">Session expires after 15 minutes of inactivity.</p>
+</main>
+
+<script src="js/login.js"></script>
+</body>
+</html>
