@@ -29,8 +29,23 @@
     <!-- Generator -->
     <section class="card generator" aria-labelledby="genTitle">
         <h1 id="genTitle">Generate a secure MPIN</h1>
-        <p class="muted">Pick a length. Every MPIN is drawn from a cryptographic random source,
+        <p class="muted">Name its purpose and pick a length. Every MPIN is drawn from a cryptographic random source,
             and easy guesses like <code>1234</code>, <code>1111</code> or <code>2580</code> are never issued.</p>
+
+        <label class="field label-field">
+            <span class="field-row">
+                <span>Label / Purpose</span>
+                <span class="counter" id="labelCounter">0 / 60</span>
+            </span>
+            <span class="input-wrap with-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+                <input type="text" id="label" maxlength="60" list="recentLabels" autocomplete="off"
+                       placeholder="e.g. SBI mobile banking, Office locker" required
+                       aria-describedby="labelError">
+            </span>
+            <datalist id="recentLabels"></datalist>
+            <span class="field-error" id="labelError" hidden>Please enter a label so you know what this MPIN is for.</span>
+        </label>
 
         <div class="segmented" role="radiogroup" aria-label="MPIN length">
             <label>
@@ -45,6 +60,7 @@
         </div>
 
         <div class="pin-display" id="pinDisplay" aria-live="polite" aria-atomic="true"></div>
+        <p class="pin-label" id="pinLabel" hidden></p>
 
         <div class="actions">
             <button class="btn btn-primary btn-lg" id="generateBtn">

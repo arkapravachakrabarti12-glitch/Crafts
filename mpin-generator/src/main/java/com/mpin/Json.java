@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** Tiny JSON helpers — the payloads here are only digits, numbers and timestamps. */
+/** Tiny JSON helpers for the few small payloads this app sends. */
 final class Json {
 
     static final DateTimeFormatter TIME = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -17,6 +17,7 @@ final class Json {
 
     static String record(MpinRecord r) {
         return "{\"mpin\":\"" + r.mpin() + "\",\"length\":" + r.length()
+                + ",\"label\":" + string(r.label())
                 + ",\"generatedAt\":\"" + TIME.format(r.generatedAt()) + "\"}";
     }
 
@@ -25,7 +26,27 @@ final class Json {
     }
 
     static String error(String message) {
-        return "{\"error\":\"" + message.replace("\\", "\\\\").replace("\"", "\\\"") + "\"}";
+        return "{\"error\":" + string(message) + "}";
+    }
+
+    /** Quoted, escaped JSON string (labels are user-typed, so escape everything). */
+    static String string(String value) {
+        StringBuilder sb = new StringBuilder("\"");
+        for (char c : value.toCharArray()) {
+            switch (c) {
+                case '"' -> sb.append("\\\"");
+                case '\\' -> sb.append("\\\\");
+                case '<' -> sb.append("\\u003c");
+                default -> {
+                    if (c < 0x20) {
+                        sb.append(String.format("\\u%04x", (int) c));
+                    } else {
+                        sb.append(c);
+                    }
+                }
+            }
+        }
+        return sb.append('"').toString();
     }
 
     static void send(HttpServletResponse resp, int status, String body) throws IOException {

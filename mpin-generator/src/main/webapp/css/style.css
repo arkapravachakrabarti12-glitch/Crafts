@@ -150,7 +150,7 @@ svg {
 /* ---------- Segmented control ---------- */
 .segmented {
     position: relative; display: inline-grid; grid-template-columns: 1fr 1fr;
-    margin-top: 1.6rem; padding: 4px;
+    margin-top: 1.1rem; padding: 4px;
     background: rgba(0,0,0,0.25); border: 1px solid var(--border);
     border-radius: 14px;
 }
@@ -218,7 +218,13 @@ svg {
     background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px;
     animation: slideIn .3s ease;
 }
-.history-list .pin { font: 700 1.1rem var(--mono); letter-spacing: 0.18em; }
+.history-list .entry { display: grid; gap: 0.1rem; min-width: 0; }
+.history-list .entry-label {
+    font-size: 0.82rem; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.history-list .pin { font: 700 1.1rem var(--mono); letter-spacing: 0.18em; color: var(--accent); }
+.history-list .meta { flex-shrink: 0; }
 .history-list .meta { color: var(--muted); font-size: 0.78rem; text-align: right; }
 .badge {
     display: inline-block; margin-right: 0.4rem; padding: 0.05rem 0.45rem;
@@ -232,6 +238,24 @@ svg {
 /* ---------- Forms (login) ---------- */
 .auth-page { display: grid; place-items: center; min-height: 100vh; padding: 1rem; }
 .auth-card { width: 100%; max-width: 420px; }
+.label-field { margin-top: 1.6rem; max-width: 460px; }
+.field-row { display: flex; justify-content: space-between; align-items: baseline; }
+.counter { font-weight: 500; font-size: 0.75rem; color: var(--muted); opacity: 0.8; }
+.input-wrap.with-icon > svg {
+    position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%);
+    color: var(--muted); pointer-events: none;
+}
+.input-wrap.with-icon input { padding-left: 2.6rem; padding-right: 0.95rem; }
+.field-error { color: #fca5a5; font-weight: 500; font-size: 0.8rem; }
+.field.invalid input, .field.invalid input:focus { border-color: var(--danger); box-shadow: 0 0 0 4px rgba(248,113,113,0.12); }
+.field.invalid .input-wrap { animation: shake .35s ease; }
+
+.pin-label {
+    margin: -0.75rem 0 1.5rem; text-align: center;
+    color: var(--accent); font-weight: 600; font-size: 0.95rem;
+    overflow-wrap: anywhere;
+}
+
 .form { display: grid; gap: 1rem; margin-top: 1.6rem; }
 .field { display: grid; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--muted); }
 .field input {
@@ -270,6 +294,7 @@ svg {
 /* ---------- Animations ---------- */
 @keyframes pop { 0% { transform: scale(0.92); } 60% { transform: scale(1.05); } 100% { transform: scale(1); } }
 @keyframes slideIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 @media (prefers-reduced-motion: reduce) {

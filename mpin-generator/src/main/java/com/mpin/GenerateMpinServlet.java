@@ -9,12 +9,18 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-/** POST /generateMpin?length=4|6 -> {"mpin":"4829","length":4,"generatedAt":"..."} */
+/**
+ * POST /generateMpin  length=4|6, label=&lt;purpose&gt;
+ *   -> {"mpin":"4829","length":4,"label":"Bank app","generatedAt":"..."}
+ */
 @WebServlet("/generateMpin")
 public class GenerateMpinServlet extends HttpServlet {
 
+    static final int MAX_LABEL_LENGTH = 60;
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
         int length;
         try {
             length = Integer.parseInt(req.getParameter("length"));
@@ -26,14 +32,34 @@ public class GenerateMpinServlet extends HttpServlet {
             return;
         }
 
+        String label = cleanLabel(req.getParameter("label"));
+        if (label.isEmpty()) {
+            Json.send(resp, HttpServletResponse.SC_BAD_REQUEST, Json.error("Please enter a label (what this MPIN is for)"));
+            return;
+        }
+        if (label.length() > MAX_LABEL_LENGTH) {
+            Json.send(resp, HttpServletResponse.SC_BAD_REQUEST,
+                    Json.error("Label must be at most " + MAX_LABEL_LENGTH + " characters"));
+            return;
+        }
+
         HttpSession session = req.getSession(false);
         MpinRecord record = new MpinRecord(
                 MpinGenerator.generate(length),
                 length,
+                label,
                 LocalDateTime.now(),
                 (String) session.getAttribute("user"));
         MpinHistory.add(session, record);
 
         Json.send(resp, HttpServletResponse.SC_OK, Json.record(record));
+    }
+
+    /** Trims, drops control characters and collapses runs of whitespace. */
+    static String cleanLabel(String raw) {
+        if (raw == null) {
+            return "";
+        }
+        return raw.replaceAll("\\p{Cntrl}", " ").replaceAll("\\s+", " ").trim();
     }
 }

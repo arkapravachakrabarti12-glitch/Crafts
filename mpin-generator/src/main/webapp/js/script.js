@@ -10,6 +10,12 @@
     const countEl = document.getElementById("historyCount");
     const toastEl = document.getElementById("toast");
     const radios = document.querySelectorAll('input[name="length"]');
+    const labelInput = document.getElementById("label");
+    const labelField = labelInput.closest(".field");
+    const labelError = document.getElementById("labelError");
+    const labelCounter = document.getElementById("labelCounter");
+    const pinLabel = document.getElementById("pinLabel");
+    const recentLabels = document.getElementById("recentLabels");
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let currentPin = null;
@@ -23,6 +29,7 @@
     /* ---------- PIN boxes ---------- */
     function renderEmpty(length) {
         currentPin = null;
+        pinLabel.hidden = true;
         display.classList.toggle("six", length === 6);
         display.innerHTML = "";
         for (let i = 0; i < length; i++) {
@@ -94,8 +101,24 @@
         return body;
     }
 
+    function validLabel() {
+        const label = labelInput.value.trim().replace(/\s+/g, " ");
+        const ok = label.length > 0;
+        labelField.classList.toggle("invalid", !ok);
+        labelError.hidden = ok;
+        labelInput.setAttribute("aria-invalid", String(!ok));
+        if (!ok) {
+            // restart the shake animation
+            void labelField.offsetWidth;
+            labelInput.focus();
+        }
+        return ok ? label : null;
+    }
+
     async function generate() {
         if (busy) return;
+        const label = validLabel();
+        if (!label) return;
         busy = true;
         generateBtn.disabled = true;
         generateBtn.classList.add("loading");
@@ -104,11 +127,13 @@
             const rec = await api("generateMpin", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: "length=" + length
+                body: new URLSearchParams({ length: String(length), label: label })
             });
             await animateTo(rec.mpin);
             currentPin = rec.mpin;
             showDigits();
+            pinLabel.textContent = "For: " + rec.label;
+            pinLabel.hidden = false;
             copyBtn.disabled = false;
             visBtn.disabled = false;
             history.push(rec);
@@ -146,9 +171,16 @@
         list.innerHTML = "";
         [...history].reverse().forEach((rec) => {
             const li = document.createElement("li");
+            const entry = document.createElement("span");
+            entry.className = "entry";
+            const name = document.createElement("span");
+            name.className = "entry-label";
+            name.textContent = rec.label;
+            name.title = rec.label;
             const pin = document.createElement("span");
             pin.className = "pin";
             pin.textContent = hidden ? mask(rec.mpin) : rec.mpin;
+            entry.append(name, pin);
 
             const meta = document.createElement("span");
             meta.className = "meta";
@@ -158,8 +190,15 @@
             const time = new Date(rec.generatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
             meta.append(badge, document.createTextNode(time));
 
-            li.append(pin, meta);
+            li.append(entry, meta);
             list.appendChild(li);
+        });
+
+        recentLabels.innerHTML = "";
+        [...new Set(history.map((r) => r.label).reverse())].slice(0, 10).forEach((l) => {
+            const opt = document.createElement("option");
+            opt.value = l;
+            recentLabels.appendChild(opt);
         });
 
         const n = history.length;
@@ -215,6 +254,17 @@
     copyBtn.addEventListener("click", copyPin);
     visBtn.addEventListener("click", toggleHidden);
     clearBtn.addEventListener("click", clearHistory);
+    labelInput.addEventListener("input", () => {
+        labelCounter.textContent = labelInput.value.length + " / 60";
+        if (labelInput.value.trim()) {
+            labelField.classList.remove("invalid");
+            labelError.hidden = true;
+            labelInput.removeAttribute("aria-invalid");
+        }
+    });
+    labelInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") { e.preventDefault(); generate(); }
+    });
     radios.forEach((r) => r.addEventListener("change", () => renderEmpty(selectedLength())));
 
     document.addEventListener("keydown", (e) => {
