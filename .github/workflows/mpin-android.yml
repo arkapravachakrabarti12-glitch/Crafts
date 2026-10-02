@@ -1,0 +1,39 @@
+name: MPIN Android APK
+
+on:
+  push:
+    paths:
+      - "mpin-android/**"
+      - ".github/workflows/mpin-android.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mpin-android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit tests
+        run: ./gradlew --no-daemon test
+
+      - name: Build debug APK
+        run: ./gradlew --no-daemon assembleDebug
+
+      - name: Rename APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk MPIN-Generator.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MPIN-Generator-apk
+          path: mpin-android/MPIN-Generator.apk
+          if-no-files-found: error
