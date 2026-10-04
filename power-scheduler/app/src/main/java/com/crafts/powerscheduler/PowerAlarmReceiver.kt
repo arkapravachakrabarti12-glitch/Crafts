@@ -92,10 +92,25 @@ class PowerAlarmReceiver : BroadcastReceiver() {
         private const val CHANNEL_ID = "power"
         private const val NOTIFICATION_ID = 1
 
-        /** Blocks; call off the main thread. Posts an error notification if it fails. */
+        /**
+         * Blocks; call off the main thread. Uses root when available, otherwise
+         * the accessibility service. Posts an error notification if neither works.
+         */
         fun powerOff(context: Context, wakeAt: Long?) {
             NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
             if (RootShell.shutdown(wakeAt).exitCode == 0) return
+            if (PowerOffService.instance != null) {
+                // An enabled accessibility service lets us start an activity from the background.
+                context.startActivity(
+                    Intent(context, WakeActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+                return
+            }
+            notifyFailure(context)
+        }
+
+        fun notifyFailure(context: Context) {
             notify(
                 context,
                 NotificationCompat.Builder(context, CHANNEL_ID)

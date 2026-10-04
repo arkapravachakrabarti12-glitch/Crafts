@@ -37,7 +37,16 @@ class MainActivity : AppCompatActivity() {
         bindCard(binding.onCard, ScheduleKind.POWER_ON, R.string.on_title, R.string.on_subtitle)
 
         binding.rootCheck.setOnClickListener { checkRoot() }
-        binding.testButton.setOnClickListener { confirmTest() }
+        binding.testButton.setOnClickListener {
+            val wakeAt = System.currentTimeMillis() + 3 * 60 * 1000
+            confirmPowerOff { PowerAlarmReceiver.powerOff(applicationContext, wakeAt) }
+        }
+        binding.testOffButton.setOnClickListener {
+            confirmPowerOff { PowerAlarmReceiver.powerOff(applicationContext, null) }
+        }
+        binding.a11yOpen.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        }
         binding.exactAlarmGrant.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 startActivity(
@@ -60,6 +69,9 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         binding.exactAlarmBanner.visibility =
             if (AlarmScheduler.canScheduleExact(this)) View.GONE else View.VISIBLE
+        binding.a11yStatus.setText(
+            if (PowerOffService.instance != null) R.string.a11y_on else R.string.a11y_off
+        )
         AlarmScheduler.scheduleAll(this)
     }
 
@@ -141,15 +153,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun confirmTest() {
+    private fun confirmPowerOff(action: () -> Unit) {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.test_confirm_title)
             .setMessage(R.string.test_confirm_message)
             .setNegativeButton(R.string.cancel, null)
-            .setPositiveButton(R.string.test_confirm_ok) { _, _ ->
-                val wakeAt = System.currentTimeMillis() + 3 * 60 * 1000
-                thread { PowerAlarmReceiver.powerOff(applicationContext, wakeAt) }
-            }
+            .setPositiveButton(R.string.test_confirm_ok) { _, _ -> thread { action() } }
             .show()
     }
 }
