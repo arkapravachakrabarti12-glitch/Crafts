@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Power Scheduler</string>
+
+    <string name="root_title">Root access</string>
+    <string name="root_unknown">Not checked yet. Scheduled power off needs root.</string>
+    <string name="root_ok">Root access granted ✓</string>
+    <string name="root_missing">No root access. Android only lets rooted phones power themselves off, so schedules won\'t work on this phone.</string>
+    <string name="root_check">Check root</string>
+    <string name="root_checking">Checking…</string>
+
+    <string name="off_title">Scheduled power off</string>
+    <string name="off_subtitle">You get a notification 60 seconds before the phone turns off, and you can cancel it there.</string>
+    <string name="on_title">Scheduled power on</string>
+    <string name="on_subtitle">Experimental. Sets the phone\'s hardware alarm (RTC) when this app powers it off. Many phones ignore it, so try the test below first.</string>
+
+    <string name="every_day">Every day</string>
+    <string name="no_days">Pick at least one day</string>
+    <string name="next_run">Next: %1$s</string>
+    <string name="disabled">Off</string>
+
+    <string name="exact_alarm_needed">Allow exact alarms so the schedule fires on time.</string>
+    <string name="exact_alarm_grant">Allow</string>
+
+    <string name="test_title">Test power on</string>
+    <string name="test_subtitle">Powers the phone off now and asks it to turn back on in 3 minutes. If it doesn\'t come back, your phone doesn\'t support scheduled power on (press the power button to start it).</string>
+    <string name="test_button">Run test</string>
+    <string name="test_confirm_title">Power off now?</string>
+    <string name="test_confirm_message">The phone will shut down immediately. Save anything you\'re working on.</string>
+    <string name="test_confirm_ok">Power off</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="channel_name">Power schedule</string>
+    <string name="notif_warn_title">Powering off in 60 seconds</string>
+    <string name="notif_warn_text">Tap Cancel to keep the phone on.</string>
+    <string name="notif_warn_text_wake">The phone will turn back on at %1$s.</string>
+    <string name="notif_failed_title">Couldn\'t power off</string>
+    <string name="notif_failed_text">Root access was denied. Grant root to Power Scheduler in your root manager.</string>
+    <string name="notif_cancelled">Scheduled power off cancelled</string>
+</resources>
